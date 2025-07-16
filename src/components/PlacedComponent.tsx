@@ -33,6 +33,8 @@ interface PlacedComponentProps {
   component: PlacedComponentData
   onDrag: (id: string, x: number, y: number) => void
   onDelete: (id: string) => void
+  onConnect?: (fromId: string, toId: string) => void
+  isExecuting?: boolean
 }
 
 const componentIcons: Record<string, any> = {
@@ -65,7 +67,7 @@ const componentColors: Record<string, string> = {
   'media-out': 'electric-orange',
 }
 
-export function PlacedComponent({ component, onDrag, onDelete }: PlacedComponentProps) {
+export function PlacedComponent({ component, onDrag, onDelete, onConnect, isExecuting }: PlacedComponentProps) {
   const [isDragging, setIsDragging] = useState(false)
   const [isHovered, setIsHovered] = useState(false)
   const [showControls, setShowControls] = useState(false)
@@ -129,7 +131,7 @@ export function PlacedComponent({ component, onDrag, onDelete }: PlacedComponent
             : `0 0 5px hsl(var(--${color}) / 0.2)`,
         }}
       >
-        <Card className={`w-full h-full bg-${color}/20 border-${color}/50 flex items-center justify-center relative overflow-hidden`}>
+        <Card className={`w-full h-full bg-${color}/20 border-${color}/50 flex items-center justify-center relative overflow-hidden ${isExecuting ? 'animate-pulse' : ''}`}>
           {/* Circuit pattern background */}
           <div className="absolute inset-0 opacity-20">
             <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
