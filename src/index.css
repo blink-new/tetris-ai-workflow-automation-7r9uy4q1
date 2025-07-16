@@ -1,0 +1,98 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 240 15% 6%;
+    --foreground: 195 100% 85%;
+    --card: 240 15% 8%;
+    --card-foreground: 195 100% 85%;
+    --popover: 240 15% 8%;
+    --popover-foreground: 195 100% 85%;
+    --primary: 195 100% 50%;
+    --primary-foreground: 240 15% 6%;
+    --secondary: 240 10% 12%;
+    --secondary-foreground: 195 100% 85%;
+    --muted: 240 10% 12%;
+    --muted-foreground: 195 20% 65%;
+    --accent: 15 100% 60%;
+    --accent-foreground: 240 15% 6%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 240 10% 15%;
+    --input: 240 10% 15%;
+    --ring: 195 100% 50%;
+    --chart-1: 195 100% 50%;
+    --chart-2: 15 100% 60%;
+    --chart-3: 280 65% 60%;
+    --chart-4: 120 60% 50%;
+    --chart-5: 45 80% 55%;
+    --radius: 0.5rem;
+    
+    /* Custom electrical theme colors */
+    --electric-blue: 195 100% 50%;
+    --electric-orange: 15 100% 60%;
+    --circuit-green: 120 60% 50%;
+    --spark-yellow: 45 80% 55%;
+    --wire-silver: 0 0% 75%;
+    --sidebar-background: 240 15% 8%;
+    --sidebar-foreground: 195 100% 85%;
+    --sidebar-primary: 195 100% 50%;
+    --sidebar-primary-foreground: 240 15% 6%;
+    --sidebar-accent: 240 10% 12%;
+    --sidebar-accent-foreground: 195 100% 85%;
+    --sidebar-border: 240 10% 15%;
+    --sidebar-ring: 195 100% 50%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground font-sans;
+
+    font-family: Inter, sans-serif;
+  }
+  
+  .font-mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+}
+
+@layer components {
+  .circuit-pattern {
+    background-image: 
+      radial-gradient(circle at 25% 25%, hsl(var(--electric-blue)) 1px, transparent 1px),
+      radial-gradient(circle at 75% 75%, hsl(var(--electric-orange)) 1px, transparent 1px);
+    background-size: 40px 40px;
+    background-position: 0 0, 20px 20px;
+  }
+  
+  .electrical-glow {
+    box-shadow: 
+      0 0 10px hsl(var(--electric-blue) / 30%),
+      0 0 20px hsl(var(--electric-blue) / 20%),
+      0 0 30px hsl(var(--electric-blue) / 10%);
+  }
+  
+  .spark-animation {
+    animation: spark 2s ease-in-out infinite;
+  }
+  
+  @keyframes spark {
+    0%, 100% { 
+      opacity: 60%; 
+    }
+
+    50% { 
+      opacity: 100%; 
+      transform: scale(1.05); 
+    }
+  }
+}
