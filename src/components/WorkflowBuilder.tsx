@@ -130,40 +130,66 @@ export function WorkflowBuilder({ selectedComponent, onComponentPlaced }: Workfl
   }
 
   return (
-    <div className="h-full relative bg-background/30">
+    <div className="h-full relative bg-gradient-to-br from-background/40 to-background/60">
       {/* Enhanced Stats Overlay */}
       <div className="absolute top-4 left-4 z-20 flex gap-3 flex-wrap">
-        <Card className="px-3 py-2 bg-card/80 backdrop-blur-sm border-border/50">
-          <div className="flex items-center gap-2">
-            <Zap className="w-4 h-4 text-electric-blue" />
-            <span className="text-sm font-mono text-foreground">
-              {placedComponents.length} Components
-            </span>
-          </div>
-        </Card>
+        <motion.div
+          initial={{ scale: 0, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ delay: 0.1 }}
+        >
+          <Card className="px-4 py-3 bg-gradient-to-r from-tetris-cyan/20 to-tetris-blue/20 backdrop-blur-sm border-2 border-tetris-cyan/40 game-glow rounded-xl">
+            <div className="flex items-center gap-2">
+              <motion.div
+                className="w-6 h-6 bg-gradient-to-br from-tetris-cyan to-tetris-blue rounded-lg flex items-center justify-center tetris-block"
+                animate={{ rotate: [0, 360] }}
+                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+              >
+                <Zap className="w-3 h-3 text-white" />
+              </motion.div>
+              <span className="text-sm font-bold font-mono text-foreground">
+                {placedComponents.length} Blocks
+              </span>
+            </div>
+          </Card>
+        </motion.div>
 
-        <Card className="px-3 py-2 bg-card/80 backdrop-blur-sm border-border/50">
-          <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-electric-green animate-pulse" />
-            <span className="text-sm font-mono text-foreground">
-              {connections.length} Connections
-            </span>
-          </div>
-        </Card>
+        <motion.div
+          initial={{ scale: 0, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ delay: 0.2 }}
+        >
+          <Card className="px-4 py-3 bg-gradient-to-r from-tetris-green/20 to-candy-mint/20 backdrop-blur-sm border-2 border-tetris-green/40 game-glow rounded-xl">
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-gradient-to-r from-tetris-green to-candy-mint animate-pulse tetris-glow" />
+              <span className="text-sm font-bold font-mono text-foreground">
+                {connections.length} Links
+              </span>
+            </div>
+          </Card>
+        </motion.div>
 
         {placedComponents.length > 0 && (
           <motion.div
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
+            transition={{ delay: 0.3 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
-            <Card className="px-3 py-2 bg-electric-green/20 border-electric-green/50 electrical-glow">
+            <Card className="px-4 py-3 bg-gradient-to-r from-tetris-green/30 to-candy-lime/30 border-2 border-tetris-green/60 game-glow rounded-xl">
               <button
                 onClick={executeWorkflow}
                 disabled={isExecuting}
-                className="flex items-center gap-2 text-sm font-medium text-electric-green hover:text-electric-green/80 disabled:opacity-50"
+                className="flex items-center gap-2 text-sm font-bold text-tetris-green hover:text-candy-lime disabled:opacity-50 transition-colors duration-300"
               >
-                <Play className="w-4 h-4" />
-                {isExecuting ? 'Executing...' : 'Run Workflow'}
+                <motion.div
+                  animate={isExecuting ? { rotate: 360 } : {}}
+                  transition={{ duration: 1, repeat: isExecuting ? Infinity : 0, ease: "linear" }}
+                >
+                  <Play className="w-4 h-4" />
+                </motion.div>
+                {isExecuting ? 'Playing...' : 'Start Game'}
               </button>
             </Card>
           </motion.div>
@@ -174,12 +200,19 @@ export function WorkflowBuilder({ selectedComponent, onComponentPlaced }: Workfl
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
+            transition={{ delay: 0.4 }}
+            className="candy-bounce"
           >
-            <Card className="px-3 py-2 bg-electric-blue/20 border-electric-blue/50 electrical-glow">
+            <Card className="px-4 py-3 bg-gradient-to-r from-tetris-purple/30 to-tetris-pink/30 border-2 border-tetris-purple/60 game-glow rounded-xl">
               <div className="flex items-center gap-2">
-                <Plus className="w-4 h-4 text-electric-blue" />
-                <span className="text-sm font-medium text-electric-blue">
-                  Place {selectedComponent}
+                <motion.div
+                  animate={{ rotate: [0, 90, 180, 270, 360] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  <Plus className="w-4 h-4 text-tetris-purple" />
+                </motion.div>
+                <span className="text-sm font-bold text-tetris-purple">
+                  Drop {selectedComponent}
                 </span>
               </div>
             </Card>
@@ -191,12 +224,17 @@ export function WorkflowBuilder({ selectedComponent, onComponentPlaced }: Workfl
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
+            transition={{ delay: 0.5 }}
           >
-            <Card className="px-3 py-2 bg-electric-orange/20 border-electric-orange/50 electrical-glow">
+            <Card className="px-4 py-3 bg-gradient-to-r from-tetris-orange/30 to-candy-coral/30 border-2 border-tetris-orange/60 game-glow rounded-xl">
               <div className="flex items-center gap-2">
-                <div className="w-4 h-4 border-2 border-electric-orange border-t-transparent rounded-full animate-spin" />
-                <span className="text-sm font-medium text-electric-orange">
-                  {executionProgress}%
+                <motion.div 
+                  className="w-4 h-4 border-2 border-tetris-orange border-t-transparent rounded-full"
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                />
+                <span className="text-sm font-bold text-tetris-orange">
+                  {executionProgress}% Complete
                 </span>
               </div>
             </Card>
@@ -216,120 +254,200 @@ export function WorkflowBuilder({ selectedComponent, onComponentPlaced }: Workfl
         {/* Grid Background */}
         <GridCanvas visible={true} />
         
-        {/* Animated Circuit Pattern */}
-        <div className="absolute inset-0 opacity-5">
+        {/* Animated Game Pattern */}
+        <div className="absolute inset-0 opacity-10">
           <motion.svg 
             className="w-full h-full" 
             xmlns="http://www.w3.org/2000/svg"
             initial={{ opacity: 0 }}
-            animate={{ opacity: 0.1 }}
+            animate={{ opacity: 0.15 }}
             transition={{ duration: 2 }}
           >
             <defs>
-              <pattern id="circuit-game" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse">
-                <motion.path
-                  d="M20 20h160M20 60h40m80 0h40M20 100h160M20 140h40m80 0h40M20 180h160"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  fill="none"
-                  className="text-electric-blue"
-                  initial={{ pathLength: 0 }}
-                  animate={{ pathLength: 1 }}
-                  transition={{ duration: 3, repeat: Infinity, repeatType: "reverse" }}
-                />
-                <motion.circle 
-                  cx="60" cy="60" r="4" 
-                  fill="currentColor" 
-                  className="text-electric-orange"
+              <pattern id="tetris-game-pattern" x="0" y="0" width="160" height="160" patternUnits="userSpaceOnUse">
+                {/* Tetris block shapes */}
+                <motion.rect
+                  x="20" y="20" width="40" height="40"
+                  fill="currentColor"
+                  className="text-tetris-cyan"
+                  rx="6"
                   animate={{ 
-                    scale: [1, 1.5, 1],
-                    opacity: [0.3, 1, 0.3]
+                    opacity: [0.3, 0.8, 0.3],
+                    scale: [1, 1.1, 1]
+                  }}
+                  transition={{ duration: 3, repeat: Infinity }}
+                />
+                <motion.rect
+                  x="100" y="20" width="40" height="40"
+                  fill="currentColor"
+                  className="text-tetris-orange"
+                  rx="6"
+                  animate={{ 
+                    opacity: [0.3, 0.8, 0.3],
+                    scale: [1, 1.1, 1]
+                  }}
+                  transition={{ duration: 3, repeat: Infinity, delay: 0.5 }}
+                />
+                <motion.rect
+                  x="20" y="100" width="40" height="40"
+                  fill="currentColor"
+                  className="text-tetris-purple"
+                  rx="6"
+                  animate={{ 
+                    opacity: [0.3, 0.8, 0.3],
+                    scale: [1, 1.1, 1]
+                  }}
+                  transition={{ duration: 3, repeat: Infinity, delay: 1 }}
+                />
+                <motion.rect
+                  x="100" y="100" width="40" height="40"
+                  fill="currentColor"
+                  className="text-tetris-green"
+                  rx="6"
+                  animate={{ 
+                    opacity: [0.3, 0.8, 0.3],
+                    scale: [1, 1.1, 1]
+                  }}
+                  transition={{ duration: 3, repeat: Infinity, delay: 1.5 }}
+                />
+                
+                {/* Candy Crush style gems */}
+                <motion.circle 
+                  cx="80" cy="40" r="6" 
+                  fill="currentColor" 
+                  className="text-tetris-pink"
+                  animate={{ 
+                    scale: [1, 1.3, 1],
+                    opacity: [0.4, 1, 0.4]
                   }}
                   transition={{ duration: 2, repeat: Infinity }}
                 />
                 <motion.circle 
-                  cx="140" cy="60" r="4" 
+                  cx="40" cy="80" r="6" 
                   fill="currentColor" 
-                  className="text-electric-green"
+                  className="text-candy-mint"
                   animate={{ 
-                    scale: [1, 1.5, 1],
-                    opacity: [0.3, 1, 0.3]
+                    scale: [1, 1.3, 1],
+                    opacity: [0.4, 1, 0.4]
                   }}
-                  transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
+                  transition={{ duration: 2, repeat: Infinity, delay: 0.7 }}
                 />
                 <motion.circle 
-                  cx="60" cy="140" r="4" 
+                  cx="120" cy="80" r="6" 
                   fill="currentColor" 
-                  className="text-spark-yellow"
+                  className="text-tetris-yellow"
                   animate={{ 
-                    scale: [1, 1.5, 1],
-                    opacity: [0.3, 1, 0.3]
+                    scale: [1, 1.3, 1],
+                    opacity: [0.4, 1, 0.4]
                   }}
-                  transition={{ duration: 2, repeat: Infinity, delay: 1 }}
+                  transition={{ duration: 2, repeat: Infinity, delay: 1.4 }}
                 />
                 <motion.circle 
-                  cx="140" cy="140" r="4" 
+                  cx="80" cy="120" r="6" 
                   fill="currentColor" 
-                  className="text-electric-blue"
+                  className="text-candy-coral"
                   animate={{ 
-                    scale: [1, 1.5, 1],
-                    opacity: [0.3, 1, 0.3]
+                    scale: [1, 1.3, 1],
+                    opacity: [0.4, 1, 0.4]
                   }}
-                  transition={{ duration: 2, repeat: Infinity, delay: 1.5 }}
+                  transition={{ duration: 2, repeat: Infinity, delay: 2.1 }}
                 />
               </pattern>
             </defs>
-            <rect width="100%" height="100%" fill="url(#circuit-game)" />
+            <rect width="100%" height="100%" fill="url(#tetris-game-pattern)" />
           </motion.svg>
         </div>
 
         {/* Connection Lines */}
         <svg className="absolute inset-0 pointer-events-none" style={{ zIndex: 1 }}>
           <defs>
-            <linearGradient id="connectionGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="hsl(var(--electric-blue))" stopOpacity="0.8" />
-              <stop offset="50%" stopColor="hsl(var(--electric-green))" stopOpacity="1" />
-              <stop offset="100%" stopColor="hsl(var(--electric-orange))" stopOpacity="0.8" />
+            <linearGradient id="tetrisConnectionGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="hsl(var(--tetris-cyan))" stopOpacity="0.9" />
+              <stop offset="25%" stopColor="hsl(var(--tetris-purple))" stopOpacity="1" />
+              <stop offset="50%" stopColor="hsl(var(--tetris-pink))" stopOpacity="1" />
+              <stop offset="75%" stopColor="hsl(var(--tetris-orange))" stopOpacity="1" />
+              <stop offset="100%" stopColor="hsl(var(--tetris-yellow))" stopOpacity="0.9" />
             </linearGradient>
-            <filter id="glow">
-              <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+            <filter id="gameGlow">
+              <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+              <feMerge> 
+                <feMergeNode in="coloredBlur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+            <filter id="candyGlow">
+              <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+              <feColorMatrix in="coloredBlur" values="1 0 1 0 0  0 1 1 0 0  1 0 1 0 0  0 0 0 1 0"/>
               <feMerge> 
                 <feMergeNode in="coloredBlur"/>
                 <feMergeNode in="SourceGraphic"/>
               </feMerge>
             </filter>
           </defs>
-          {connections.map((connection) => (
+          {connections.map((connection, index) => (
             <motion.path
               key={connection.id}
               d={getConnectionPath(connection)}
-              stroke="url(#connectionGradient)"
-              strokeWidth="3"
+              stroke="url(#tetrisConnectionGradient)"
+              strokeWidth="4"
               fill="none"
-              filter="url(#glow)"
+              filter="url(#gameGlow)"
+              strokeDasharray="8,4"
               initial={{ pathLength: 0, opacity: 0 }}
-              animate={{ pathLength: 1, opacity: 1 }}
-              transition={{ duration: 1, ease: "easeInOut" }}
+              animate={{ 
+                pathLength: 1, 
+                opacity: 1,
+                strokeDashoffset: [0, -24]
+              }}
+              transition={{ 
+                pathLength: { duration: 1, ease: "easeInOut" },
+                opacity: { duration: 1, ease: "easeInOut" },
+                strokeDashoffset: { duration: 2, repeat: Infinity, ease: "linear" }
+              }}
             />
           ))}
           
-          {/* Animated data flow particles */}
-          {connections.map((connection) => (
-            <motion.circle
-              key={`particle-${connection.id}`}
-              r="3"
-              fill="hsl(var(--electric-blue))"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: [0, 1, 0] }}
-              transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-            >
-              <animateMotion
-                dur="2s"
-                repeatCount="indefinite"
-                path={getConnectionPath(connection)}
-              />
-            </motion.circle>
-          ))}
+          {/* Animated candy-like data flow particles */}
+          {connections.map((connection, index) => {
+            const colors = ['tetris-cyan', 'tetris-purple', 'tetris-pink', 'tetris-orange', 'tetris-yellow', 'candy-mint', 'candy-coral'];
+            const color = colors[index % colors.length];
+            
+            return (
+              <motion.g key={`particle-group-${connection.id}`}>
+                <motion.circle
+                  r="4"
+                  fill={`hsl(var(--${color}))`}
+                  filter="url(#candyGlow)"
+                  initial={{ opacity: 0 }}
+                  animate={{ 
+                    opacity: [0, 1, 1, 0],
+                    scale: [0.8, 1.2, 1, 0.8]
+                  }}
+                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  <animateMotion
+                    dur="3s"
+                    repeatCount="indefinite"
+                    path={getConnectionPath(connection)}
+                  />
+                </motion.circle>
+                <motion.circle
+                  r="2"
+                  fill="white"
+                  opacity="0.8"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: [0, 0.8, 0.8, 0] }}
+                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.1 }}
+                >
+                  <animateMotion
+                    dur="3s"
+                    repeatCount="indefinite"
+                    path={getConnectionPath(connection)}
+                  />
+                </motion.circle>
+              </motion.g>
+            );
+          })}
         </svg>
 
         {/* Placed Components */}
@@ -356,39 +474,65 @@ export function WorkflowBuilder({ selectedComponent, onComponentPlaced }: Workfl
           >
             <div className="text-center">
               <motion.div 
-                className="w-24 h-24 mx-auto mb-6 bg-electric-blue/20 rounded-full flex items-center justify-center border-2 border-electric-blue/30"
+                className="w-32 h-32 mx-auto mb-8 bg-gradient-to-br from-tetris-purple/30 to-tetris-pink/30 rounded-3xl flex items-center justify-center border-4 border-tetris-purple/40 tetris-block"
                 animate={{ 
                   boxShadow: [
-                    '0 0 20px hsl(var(--electric-blue) / 20%)',
-                    '0 0 40px hsl(var(--electric-blue) / 40%)',
-                    '0 0 20px hsl(var(--electric-blue) / 20%)'
-                  ]
+                    '0 0 30px hsl(var(--tetris-purple) / 30%)',
+                    '0 0 60px hsl(var(--tetris-pink) / 50%)',
+                    '0 0 30px hsl(var(--tetris-purple) / 30%)'
+                  ],
+                  rotate: [0, 5, -5, 0]
                 }}
-                transition={{ duration: 2, repeat: Infinity }}
+                transition={{ duration: 3, repeat: Infinity }}
               >
-                <Zap className="w-12 h-12 text-electric-blue" />
+                <motion.div
+                  animate={{ 
+                    scale: [1, 1.2, 1],
+                    rotate: [0, 180, 360]
+                  }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                >
+                  <Zap className="w-16 h-16 text-tetris-purple drop-shadow-lg" />
+                </motion.div>
               </motion.div>
-              <h3 className="text-2xl font-bold text-foreground mb-3 font-mono">
-                Start Your Circuit
-              </h3>
-              <p className="text-sm text-muted-foreground max-w-md mb-4">
-                Select components from the library and place them on the grid.
+              <motion.h3 
+                className="text-3xl font-bold text-foreground mb-4 font-mono bg-gradient-to-r from-tetris-cyan via-tetris-purple to-tetris-pink bg-clip-text text-transparent"
+                animate={{ 
+                  backgroundPosition: ['0%', '100%', '0%']
+                }}
+                transition={{ duration: 3, repeat: Infinity }}
+              >
+                Ready to Play?
+              </motion.h3>
+              <p className="text-base text-muted-foreground max-w-lg mb-6 leading-relaxed">
+                🎮 Drag colorful blocks from the library and drop them on the grid!
                 <br />
-                Connect them with cables to build your automation workflow!
+                🔗 Connect them like Tetris pieces to build amazing workflows!
+                <br />
+                ⚡ Watch your automation come to life!
               </p>
-              <div className="flex items-center justify-center gap-4 text-xs text-muted-foreground">
-                <div className="flex items-center gap-1">
-                  <Activity className="w-3 h-3" />
-                  <span>Drag & Drop</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <Zap className="w-3 h-3" />
-                  <span>Connect</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <Play className="w-3 h-3" />
-                  <span>Execute</span>
-                </div>
+              <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground">
+                <motion.div 
+                  className="flex items-center gap-2 p-2 rounded-lg bg-tetris-cyan/20 border border-tetris-cyan/30"
+                  whileHover={{ scale: 1.05 }}
+                >
+                  <Activity className="w-4 h-4 text-tetris-cyan" />
+                  <span className="font-mono">Drag & Drop</span>
+                </motion.div>
+                <motion.div 
+                  className="flex items-center gap-2 p-2 rounded-lg bg-tetris-orange/20 border border-tetris-orange/30"
+                  whileHover={{ scale: 1.05 }}
+                >
+                  <Zap className="w-4 h-4 text-tetris-orange" />
+                  <span className="font-mono">Connect</span>
+                </motion.div>
+                <motion.div 
+                  className="flex items-center gap-2 p-2 rounded-lg bg-tetris-green/20 border border-tetris-green/30"
+                  whileHover={{ scale: 1.05 }}
+                >
+                  <Play className="w-4 h-4 text-tetris-green" />
+                  <span className="font-mono">Play</span>
+                </motion.div>
               </div>
             </div>
           </motion.div>

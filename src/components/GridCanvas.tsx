@@ -18,7 +18,7 @@ export function GridCanvas({ visible }: GridCanvasProps) {
       <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <pattern
-            id="tetris-grid"
+            id="tetris-game-grid"
             x="0"
             y="0"
             width="40"
@@ -30,54 +30,92 @@ export function GridCanvas({ visible }: GridCanvasProps) {
               height="40"
               fill="none"
               stroke="currentColor"
-              strokeWidth="0.5"
-              className="text-border/30"
+              strokeWidth="1"
+              className="text-primary/20"
+              rx="2"
             />
-            {/* Connection points at grid intersections */}
+            {/* Tetris-style connection points */}
+            <circle
+              cx="20"
+              cy="20"
+              r="2"
+              fill="currentColor"
+              className="text-tetris-cyan/30"
+            />
             <circle
               cx="40"
               cy="40"
-              r="1"
+              r="1.5"
               fill="currentColor"
-              className="text-electric-blue/40"
+              className="text-tetris-purple/40"
             />
           </pattern>
           
-          {/* Electrical trace pattern */}
+          {/* Candy Crush style sparkles */}
           <pattern
-            id="electrical-traces"
+            id="candy-sparkles"
             x="0"
             y="0"
-            width="120"
-            height="120"
+            width="80"
+            height="80"
             patternUnits="userSpaceOnUse"
           >
+            <motion.circle
+              cx="20"
+              cy="20"
+              r="1"
+              fill="currentColor"
+              className="text-tetris-yellow/60"
+            />
+            <motion.circle
+              cx="60"
+              cy="20"
+              r="1.5"
+              fill="currentColor"
+              className="text-tetris-pink/50"
+            />
+            <motion.circle
+              cx="20"
+              cy="60"
+              r="1"
+              fill="currentColor"
+              className="text-candy-mint/60"
+            />
+            <motion.circle
+              cx="60"
+              cy="60"
+              r="1.5"
+              fill="currentColor"
+              className="text-tetris-orange/50"
+            />
+            {/* Game-style plus signs */}
             <path
-              d="M0 60h120M60 0v120"
+              d="M40 35v10M35 40h10"
               stroke="currentColor"
               strokeWidth="1"
-              fill="none"
-              className="text-electric-blue/10"
-            />
-            <path
-              d="M30 30h60M30 90h60M30 30v60M90 30v60"
-              stroke="currentColor"
-              strokeWidth="0.5"
-              fill="none"
-              className="text-electric-green/10"
+              className="text-tetris-cyan/30"
             />
           </pattern>
+          
+          {/* Glow filter for game effects */}
+          <filter id="gameGlow">
+            <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+            <feMerge> 
+              <feMergeNode in="coloredBlur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
         </defs>
         
-        {/* Main grid */}
-        <rect width="100%" height="100%" fill="url(#tetris-grid)" />
+        {/* Main Tetris-style grid */}
+        <rect width="100%" height="100%" fill="url(#tetris-game-grid)" />
         
-        {/* Electrical traces overlay */}
-        <rect width="100%" height="100%" fill="url(#electrical-traces)" opacity="0.3" />
+        {/* Candy Crush sparkles overlay */}
+        <rect width="100%" height="100%" fill="url(#candy-sparkles)" opacity="0.4" />
         
-        {/* Major grid lines every 5 units */}
-        <g className="text-border/50" strokeWidth="1">
-          {Array.from({ length: 50 }, (_, i) => (
+        {/* Major grid lines every 5 units - more game-like */}
+        <g className="text-primary/30" strokeWidth="2" filter="url(#gameGlow)">
+          {Array.from({ length: 25 }, (_, i) => (
             <g key={i}>
               <line
                 x1={i * 200}
@@ -85,7 +123,8 @@ export function GridCanvas({ visible }: GridCanvasProps) {
                 x2={i * 200}
                 y2="100%"
                 stroke="currentColor"
-                opacity="0.3"
+                opacity="0.2"
+                strokeDasharray="10,10"
               />
               <line
                 x1="0"
@@ -93,9 +132,33 @@ export function GridCanvas({ visible }: GridCanvasProps) {
                 x2="100%"
                 y2={i * 200}
                 stroke="currentColor"
-                opacity="0.3"
+                opacity="0.2"
+                strokeDasharray="10,10"
               />
             </g>
+          ))}
+        </g>
+        
+        {/* Animated game elements */}
+        <g className="game-pulse">
+          {Array.from({ length: 8 }, (_, i) => (
+            <motion.circle
+              key={i}
+              cx={100 + i * 150}
+              cy={100 + (i % 3) * 150}
+              r="3"
+              fill={`hsl(var(--tetris-${['cyan', 'purple', 'yellow', 'orange', 'green', 'blue', 'red', 'pink'][i]}))`}
+              opacity="0.3"
+              animate={{
+                scale: [1, 1.5, 1],
+                opacity: [0.3, 0.8, 0.3]
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                delay: i * 0.3
+              }}
+            />
           ))}
         </g>
       </svg>

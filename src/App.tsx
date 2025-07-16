@@ -21,51 +21,67 @@ function App() {
   }
 
   return (
-    <div className="h-screen bg-background circuit-pattern overflow-hidden">
+    <div className="h-screen bg-background tetris-pattern overflow-hidden">
       {/* Game-like Header */}
       <motion.header
         initial={{ y: -50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        className="h-14 bg-card/90 backdrop-blur-sm border-b border-border/50 px-4 flex items-center justify-between relative z-50"
+        className="h-16 bg-gradient-to-r from-card/95 via-card/90 to-card/95 backdrop-blur-sm border-b-2 border-primary/30 px-4 flex items-center justify-between relative z-50"
       >
         <div className="flex items-center gap-3">
           <motion.div
-            className="w-8 h-8 bg-electric-blue rounded-lg flex items-center justify-center electrical-glow"
-            whileHover={{ scale: 1.1, rotate: 180 }}
-            transition={{ duration: 0.3 }}
+            className="w-10 h-10 bg-gradient-to-br from-tetris-purple to-tetris-pink rounded-xl flex items-center justify-center game-glow tetris-block candy-bounce"
+            whileHover={{ scale: 1.2, rotate: 360 }}
+            transition={{ duration: 0.5, type: "spring" }}
           >
-            <Zap className="w-5 h-5 text-background" />
+            <Zap className="w-6 h-6 text-white drop-shadow-lg" />
           </motion.div>
           <div>
-            <h1 className="text-lg font-bold font-mono text-foreground">
-              Circuit<span className="text-electric-blue">Flow</span>
+            <h1 className="text-xl font-bold font-mono text-foreground">
+              Tetris<span className="text-transparent bg-gradient-to-r from-tetris-cyan to-tetris-purple bg-clip-text">Flow</span>
             </h1>
+            <div className="text-xs text-muted-foreground font-mono">AI Workflow Builder</div>
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setIsLibraryOpen(!isLibraryOpen)}
-            className="lg:hidden"
+        <div className="flex items-center gap-3">
+          <motion.div
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
           >
-            <Menu className="w-4 h-4" />
-          </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setIsLibraryOpen(!isLibraryOpen)}
+              className="lg:hidden bg-tetris-blue/20 hover:bg-tetris-blue/30 text-tetris-blue border border-tetris-blue/30 rounded-xl"
+            >
+              <Menu className="w-4 h-4" />
+            </Button>
+          </motion.div>
           
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setIsChatOpen(!isChatOpen)}
-            className={`${isChatOpen ? 'text-electric-blue' : 'text-muted-foreground'}`}
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
-            AI Chat
-          </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setIsChatOpen(!isChatOpen)}
+              className={`rounded-xl border-2 transition-all duration-300 ${
+                isChatOpen 
+                  ? 'bg-gradient-to-r from-tetris-cyan/20 to-tetris-blue/20 text-tetris-cyan border-tetris-cyan/50 game-glow' 
+                  : 'bg-muted/20 text-muted-foreground border-border hover:border-primary/30'
+              }`}
+            >
+              <Zap className="w-4 h-4 mr-2" />
+              AI Chat
+            </Button>
+          </motion.div>
         </div>
       </motion.header>
 
       {/* Main Game Layout */}
-      <div className="h-[calc(100vh-3.5rem)] flex">
+      <div className="h-[calc(100vh-4rem)] flex">
         {/* Component Library - Collapsible */}
         <motion.div
           initial={{ x: -300 }}
