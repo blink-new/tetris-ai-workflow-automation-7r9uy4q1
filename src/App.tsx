@@ -58,92 +58,104 @@ function App() {
               <Menu className="w-4 h-4" />
             </Button>
           </motion.div>
-          
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setIsChatOpen(!isChatOpen)}
-              className={`rounded-xl border-2 transition-all duration-300 ${
-                isChatOpen 
-                  ? 'bg-gradient-to-r from-tetris-cyan/20 to-tetris-blue/20 text-tetris-cyan border-tetris-cyan/50 game-glow' 
-                  : 'bg-muted/20 text-muted-foreground border-border hover:border-primary/30'
-              }`}
-            >
-              <Zap className="w-4 h-4 mr-2" />
-              AI Chat
-            </Button>
-          </motion.div>
         </div>
       </motion.header>
 
       {/* Main Game Layout */}
-      <div className="h-[calc(100vh-4rem)] flex">
-        {/* Component Library - Collapsible */}
-        <motion.div
-          initial={{ x: -300 }}
-          animate={{ 
-            x: isLibraryOpen ? 0 : -280,
-            width: isLibraryOpen ? 320 : 40
-          }}
-          transition={{ type: "spring", damping: 20 }}
-          className="relative z-40 lg:relative lg:z-auto"
-        >
-          <ComponentLibrary 
-            isOpen={isLibraryOpen}
-            onToggle={() => setIsLibraryOpen(!isLibraryOpen)}
-            selectedComponent={selectedComponent}
-            onSelectComponent={setSelectedComponent}
-          />
-        </motion.div>
-
-        {/* Main Canvas Area */}
+      <div className="h-[calc(100vh-4rem)] flex flex-col">
+        {/* Top Section - Component Library and Canvas */}
         <div className="flex-1 flex">
-          {/* Workflow Canvas */}
+          {/* Component Library - Collapsible */}
+          <motion.div
+            initial={{ x: -300 }}
+            animate={{ 
+              x: isLibraryOpen ? 0 : -280,
+              width: isLibraryOpen ? 320 : 40
+            }}
+            transition={{ type: "spring", damping: 20 }}
+            className="relative z-40 lg:relative lg:z-auto"
+          >
+            <ComponentLibrary 
+              isOpen={isLibraryOpen}
+              onToggle={() => setIsLibraryOpen(!isLibraryOpen)}
+              selectedComponent={selectedComponent}
+              onSelectComponent={setSelectedComponent}
+            />
+          </motion.div>
+
+          {/* Workflow Canvas - Full Width */}
           <div className="flex-1">
             <WorkflowBuilder 
               selectedComponent={selectedComponent}
               onComponentPlaced={() => setSelectedComponent(null)}
             />
           </div>
-
-          {/* AI Chat Panel - Right Side */}
-          <motion.div
-            initial={{ x: 400 }}
-            animate={{ 
-              x: isChatOpen ? 0 : 360,
-              width: isChatOpen ? 400 : 40
-            }}
-            transition={{ type: "spring", damping: 20 }}
-            className="relative z-30 bg-background/50 backdrop-blur-sm border-l border-border/30"
-          >
-            {/* Chat Toggle Button */}
-            <div className="absolute left-0 top-4 z-10">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setIsChatOpen(!isChatOpen)}
-                className="w-8 h-8 p-0 bg-card/80 border border-border/50 rounded-r-lg rounded-l-none"
-              >
-                {isChatOpen ? (
-                  <X className="w-4 h-4" />
-                ) : (
-                  <Zap className="w-4 h-4 text-electric-blue" />
-                )}
-              </Button>
-            </div>
-
-            {/* Chat Content */}
-            <div className={`h-full transition-opacity duration-300 ${isChatOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-              <div className="p-4 h-full">
-                <AIChat onWorkflowSuggestion={handleWorkflowSuggestion} />
-              </div>
-            </div>
-          </motion.div>
         </div>
+
+        {/* Bottom Chat Bar */}
+        <motion.div
+          initial={{ y: 100 }}
+          animate={{ 
+            y: isChatOpen ? 0 : 60,
+            height: isChatOpen ? 200 : 60
+          }}
+          transition={{ type: "spring", damping: 20 }}
+          className="relative z-30 bg-background/95 backdrop-blur-sm border-t border-border/30"
+        >
+          {/* Chat Toggle Button */}
+          <div className="absolute right-4 -top-12 z-10">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setIsChatOpen(!isChatOpen)}
+              className={`w-10 h-10 p-0 rounded-t-lg rounded-b-none border border-b-0 transition-all duration-300 ${
+                isChatOpen 
+                  ? 'bg-gradient-to-r from-tetris-cyan/20 to-tetris-blue/20 text-tetris-cyan border-tetris-cyan/50 game-glow' 
+                  : 'bg-card/80 border-border/50 hover:border-primary/30'
+              }`}
+            >
+              {isChatOpen ? (
+                <X className="w-4 h-4" />
+              ) : (
+                <Zap className="w-4 h-4 text-electric-blue" />
+              )}
+            </Button>
+          </div>
+
+          {/* Chat Content */}
+          <div className={`h-full transition-opacity duration-300 ${isChatOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+            <div className="p-4 h-full">
+              <AIChat onWorkflowSuggestion={handleWorkflowSuggestion} />
+            </div>
+          </div>
+
+          {/* Collapsed State - Show Quick Info */}
+          {!isChatOpen && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="flex items-center justify-between px-4 py-3 h-full"
+            >
+              <div className="flex items-center gap-3">
+                <motion.div
+                  className="w-8 h-8 bg-electric-blue rounded-full flex items-center justify-center electrical-glow"
+                  animate={{ 
+                    boxShadow: [
+                      '0 0 10px hsl(var(--electric-blue) / 30%)',
+                      '0 0 20px hsl(var(--electric-blue) / 50%)',
+                      '0 0 10px hsl(var(--electric-blue) / 30%)'
+                    ]
+                  }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                >
+                  <Zap className="w-4 h-4 text-background" />
+                </motion.div>
+                <span className="text-sm font-semibold text-foreground">AI Assistant Ready</span>
+              </div>
+              <span className="text-xs text-muted-foreground">Click to expand chat</span>
+            </motion.div>
+          )}
+        </motion.div>
       </div>
 
       {/* Mobile Overlay */}
